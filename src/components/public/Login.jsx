@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { userLogin } from "../../lib/api/publicApi";
-import { alertError } from "../../lib/alert";
+import { alertError, alertModal } from "../../lib/alert";
 import { jwtDecode } from "jwt-decode";
 
 export default function Login() {
@@ -41,7 +41,7 @@ export default function Login() {
 
     if (response.status === 200) {
       localStorage.setItem("token", responseBody.token);
-
+      await alertModal("Login berhasil");
       navigate("/dashboard");
     } else {
       await alertError(responseBody.error);

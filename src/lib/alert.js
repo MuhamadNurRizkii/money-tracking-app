@@ -27,3 +27,13 @@ export const alertConfirm = async () => {
     confirmButtonText: "Yes, delete it!",
   });
 };
+
+export const alertModal = async (message) => {
+  return Swal.fire({
+    position: "top-end",
+    icon: "success",
+    title: message,
+    showConfirmButton: false,
+    timer: 900,
+  });
+};

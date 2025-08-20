@@ -26,7 +26,7 @@ export default function Profile() {
         setProfile(responBody.data);
       } else {
         alertError(responBody.message);
-        navigate("/");
+        navigate("/login");
       }
     } catch (error) {
       console.log("Terjadi kesalahan:", error);
@@ -60,7 +60,7 @@ export default function Profile() {
       {/* Header */}
       <div className="flex flex-col items-center">
         <div className="w-20 h-20 flex items-center justify-center rounded-full bg-gradient-to-br from-green-500 to-emerald-400 text-white text-3xl font-bold shadow-md">
-          {profile.first_name.charAt(0).toUpperCase()}
+          {profile?.first_name?.charAt(0).toUpperCase()}
         </div>
         <h1 className="text-xl font-semibold mt-4 text-gray-900 dark:text-gray-100">
           {fullName}
@@ -103,7 +103,7 @@ export default function Profile() {
         <button
           onClick={() => {
             localStorage.removeItem("token");
-            window.location.href = "/login";
+            window.location.href = "/";
           }}
           className="w-full py-2.5 bg-red-500 hover:bg-red-600 text-white rounded-xl font-medium shadow-md transition"
         >
