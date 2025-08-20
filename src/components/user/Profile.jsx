@@ -26,7 +26,7 @@ export default function Profile() {
         setProfile(responBody.data);
       } else {
         alertError(responBody.message);
-        navigate("/login");
+        navigate("/");
       }
     } catch (error) {
       console.log("Terjadi kesalahan:", error);
