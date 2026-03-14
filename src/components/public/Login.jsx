@@ -46,7 +46,10 @@ export default function Login() {
       if (response.status === 200) {
         localStorage.setItem("token", responseBody.token);
         toast.success("Login berhasil");
-        navigate("/dashboard");
+
+        setTimeout(() => {
+          navigate("/dashboard");
+        }, 1500);
       } else {
         toast.error(responseBody.error);
       }
