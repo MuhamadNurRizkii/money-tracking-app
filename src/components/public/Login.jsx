@@ -35,22 +35,24 @@ export default function Login() {
   }, [navigate]);
 
   async function handleSubmit(e) {
-    setLoading(true);
     e.preventDefault();
+    setLoading(true);
 
-    const response = await userLogin({ username, password });
-    const responseBody = await response.json();
-    console.log(responseBody);
+    try {
+      const response = await userLogin({ username, password });
+      const responseBody = await response.json();
+      console.log(responseBody);
 
-    if (response.status === 200) {
-      localStorage.setItem("token", responseBody.token);
-      toast.success("Login berhasil");
-      setTimeout(() => {
-        setLoading(false);
+      if (response.status === 200) {
+        localStorage.setItem("token", responseBody.token);
+        toast.success("Login berhasil");
         navigate("/dashboard");
-      }, 1500);
-    } else {
-      toast.error(responseBody.error);
+      } else {
+        toast.error(responseBody.error);
+      }
+    } catch (error) {
+      toast.error("Terjadi kesalahan server");
+    } finally {
       setLoading(false);
     }
   }
