@@ -62,7 +62,7 @@ export default function DashboardLayout() {
               className={`flex items-center gap-2 text-sm rounded p-2 transition-all
               ${
                 location.pathname === item.to
-                  ? "bg-white text-blue-600 dark:bg-blue-600 dark:text-white"
+                  ? " text-white border-b-2 border-r-2  border-r-white"
                   : "text-white dark:text-gray-300 hover:bg-white/10 dark:hover:bg-gray-700"
               }`}
             >

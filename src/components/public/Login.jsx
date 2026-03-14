@@ -3,8 +3,10 @@ import { Link, useNavigate } from "react-router";
 import { userLogin } from "../../lib/api/publicApi";
 import { alertError, alertModal } from "../../lib/alert";
 import { jwtDecode } from "jwt-decode";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function Login() {
+  const [loading, setLoading] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -33,6 +35,7 @@ export default function Login() {
   }, [navigate]);
 
   async function handleSubmit(e) {
+    setLoading(true);
     e.preventDefault();
 
     const response = await userLogin({ username, password });
@@ -41,15 +44,20 @@ export default function Login() {
 
     if (response.status === 200) {
       localStorage.setItem("token", responseBody.token);
-      await alertModal("Login berhasil");
-      navigate("/dashboard");
+      toast.success("Login berhasil");
+      setTimeout(() => {
+        setLoading(false);
+        navigate("/dashboard");
+      }, 1500);
     } else {
-      await alertError(responseBody.error);
+      toast.error(responseBody.error);
+      setLoading(false);
     }
   }
 
   return (
     <div className="p-6 rounded-2xl shadow-lg dark:shadow-blue-500/10 dark:border dark:border-gray-700 w-full mx-auto max-w-md bg-white dark:bg-gray-900 transition">
+      <Toaster />
       <div className="mb-7">
         <h1 className="text-2xl text-center font-bold text-blue-600">
           Money Tracking
@@ -107,8 +115,15 @@ export default function Login() {
 
           {/* Button */}
           <div className="mb-4">
-            <button className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-500 dark:hover:bg-blue-400 transition">
-              Sign In
+            <button
+              disabled={loading}
+              className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-500 dark:hover:bg-blue-400 transition"
+            >
+              {loading ? (
+                <span className="loading loading-spinner loading-sm"></span>
+              ) : (
+                "Sign In"
+              )}
             </button>
           </div>
 

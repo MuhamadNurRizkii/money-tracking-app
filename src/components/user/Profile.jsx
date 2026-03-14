@@ -70,7 +70,7 @@ export default function Profile() {
 
       {/* Info Keuangan */}
       <div className="mt-8 space-y-4">
-        <div className="flex items-center justify-between">
+        <div className="flex lg:hidden items-center justify-between">
           <span className="text-gray-500 dark:text-gray-400 pl-6">Tema</span>
           <ThemeToggle theme={theme} setTheme={setTheme} />
         </div>
@@ -90,7 +90,7 @@ export default function Profile() {
             Rp {totalPengeluaran.toLocaleString("id-ID")}
           </span>
         </div>
-        <div className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-xl p-4 flex items-center justify-between shadow">
+        <div className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-lg p-4 flex items-center justify-between shadow">
           <span className="font-medium">Saldo Akhir</span>
           <span className="font-semibold text-lg">
             Rp {saldoAkhir.toLocaleString("id-ID")}
