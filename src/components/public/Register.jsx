@@ -2,8 +2,10 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { alertError, alertSuccess } from "../../lib/alert";
 import { userRegister } from "../../lib/api/publicApi";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function Register() {
+  const [loading, setLoading] = useState(false);
   const [first_name, setFirstName] = useState("");
   const [last_name, setLastName] = useState("");
   const [username, setUsername] = useState("");
@@ -13,6 +15,7 @@ export default function Register() {
   const navigate = useNavigate();
 
   async function handleSubmit(e) {
+    setLoading(true);
     e.preventDefault();
 
     if (password !== confirmPassowrd) {
@@ -30,14 +33,19 @@ export default function Register() {
     console.log(responseBody);
 
     if (response.status === 200) {
-      await alertSuccess(responseBody.message);
-      await navigate("/login");
+      toast.success(responseBody.message);
+      setTimeout(() => {
+        navigate("/login");
+        setLoading(false);
+      }, 1500);
     } else {
-      await alertError(responseBody.error);
+      toast.error(responseBody.error);
+      setLoading(false);
     }
   }
   return (
     <div className="p-6 rounded-2xl shadow-lg dark:shadow-blue-500/10 dark:border dark:border-gray-700 w-full mx-auto max-w-md bg-white dark:bg-gray-900 transition">
+      <Toaster />
       <div className="mb-7">
         <h1 className="text-2xl text-center font-bold text-blue-600">
           Money Tracking
@@ -165,8 +173,15 @@ export default function Register() {
 
           {/* Button */}
           <div className="mb-4">
-            <button className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-500 dark:hover:bg-blue-400 transition">
-              Sign Up
+            <button
+              disabled={loading}
+              className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-500 dark:hover:bg-blue-400 transition"
+            >
+              {loading ? (
+                <span className="loading loading-spinner loading-sm"></span>
+              ) : (
+                "Sign Up"
+              )}
             </button>
           </div>
 
