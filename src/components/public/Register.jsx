@@ -19,27 +19,31 @@ export default function Register() {
     e.preventDefault();
 
     if (password !== confirmPassowrd) {
-      await alertError("confirm password salah atau tidak sama");
+      toast.error("confirm password salah atau tidak sama");
+      setLoading(false);
       return;
     }
 
-    const response = await userRegister({
-      first_name,
-      last_name,
-      username,
-      password,
-    });
-    const responseBody = await response.json();
-    console.log(responseBody);
+    try {
+      const response = await userRegister({
+        first_name,
+        last_name,
+        username,
+        password,
+      });
+      const responseBody = await response.json();
 
-    if (response.status === 200) {
-      toast.success(responseBody.message);
-      setTimeout(() => {
-        navigate("/login");
-        setLoading(false);
-      }, 1500);
-    } else {
-      toast.error(responseBody.error);
+      if (response.status === 200) {
+        toast.success(responseBody.message);
+        setTimeout(() => {
+          navigate("/login");
+        }, 1500);
+      } else {
+        toast.error(responseBody.error);
+      }
+    } catch (error) {
+      toast.error("Terjadi kesalahan server");
+    } finally {
       setLoading(false);
     }
   }

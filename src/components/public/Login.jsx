@@ -41,7 +41,6 @@ export default function Login() {
     try {
       const response = await userLogin({ username, password });
       const responseBody = await response.json();
-      console.log(responseBody);
 
       if (response.status === 200) {
         localStorage.setItem("token", responseBody.token);
