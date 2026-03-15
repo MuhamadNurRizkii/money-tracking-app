@@ -49,7 +49,7 @@ export default function DetailTransaction() {
 
   async function handleDelete(id) {
     const confrim = await alertConfirm();
-    if (!confrim) {
+    if (!confrim.isConfirmed) {
       return;
     }
 
@@ -66,19 +66,19 @@ export default function DetailTransaction() {
 
   const containerVariants = {
     hidden: { opacity: 0 },
-    visible: { 
+    visible: {
       opacity: 1,
-      transition: { staggerChildren: 0.1 }
-    }
+      transition: { staggerChildren: 0.1 },
+    },
   };
 
   const itemVariants = {
     hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
   };
 
   return (
-    <motion.main 
+    <motion.main
       variants={containerVariants}
       initial="hidden"
       animate="visible"
@@ -88,10 +88,16 @@ export default function DetailTransaction() {
       <div className="absolute top-20 right-0 w-[500px] h-[500px] bg-blue-500/5 rounded-full blur-[100px] pointer-events-none"></div>
 
       <div className="mb-8 pl-2">
-        <motion.h1 variants={itemVariants} className="text-3xl font-bold text-gray-800 dark:text-white">
+        <motion.h1
+          variants={itemVariants}
+          className="text-3xl font-bold text-gray-800 dark:text-white"
+        >
           Detail Transaksi
         </motion.h1>
-        <motion.p variants={itemVariants} className="text-gray-500 dark:text-gray-400 mt-2 font-medium">
+        <motion.p
+          variants={itemVariants}
+          className="text-gray-500 dark:text-gray-400 mt-2 font-medium"
+        >
           Daftar seluruh riwayat transaksi Anda
         </motion.p>
       </div>
@@ -130,27 +136,37 @@ export default function DetailTransaction() {
                         <td className="px-6 py-4 text-gray-800 dark:text-gray-200 font-medium">
                           {item.title}
                         </td>
-                        <td className={`px-6 py-4 font-bold ${isIncome ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-900 dark:text-gray-100'}`}>
-                          {isIncome ? "+" : "-"} {item.amount.toLocaleString("id-ID", {
+                        <td
+                          className={`px-6 py-4 font-bold ${isIncome ? "text-emerald-600 dark:text-emerald-400" : "text-gray-900 dark:text-gray-100"}`}
+                        >
+                          {isIncome ? "+" : "-"}{" "}
+                          {item.amount.toLocaleString("id-ID", {
                             style: "currency",
                             currency: "IDR",
                             minimumFractionDigits: 0,
                           })}
                         </td>
                         <td className="px-6 py-4">
-                          <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                            isIncome 
-                              ? "bg-emerald-100/50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400" 
-                              : "bg-rose-100/50 text-rose-700 dark:bg-rose-500/10 dark:text-rose-400"
-                          }`}>
+                          <span
+                            className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                              isIncome
+                                ? "bg-emerald-100/50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400"
+                                : "bg-rose-100/50 text-rose-700 dark:bg-rose-500/10 dark:text-rose-400"
+                            }`}
+                          >
                             {item.type}
                           </span>
                         </td>
                         <td className="px-6 py-4 text-gray-500 dark:text-gray-400">
                           {(() => {
-                            const [day, month, year] = item.created_at.split("-");
-                            return new Date(`${year}-${month}-${day}`).toLocaleDateString("id-ID", {
-                              day: "2-digit", month: "short", year: "numeric",
+                            const [day, month, year] =
+                              item.created_at.split("-");
+                            return new Date(
+                              `${year}-${month}-${day}`,
+                            ).toLocaleDateString("id-ID", {
+                              day: "2-digit",
+                              month: "short",
+                              year: "numeric",
                             });
                           })()}
                         </td>
@@ -185,8 +201,12 @@ export default function DetailTransaction() {
             {transactions.map((item) => {
               const isIncome = item.type === "pemasukkan";
               const [day, month, year] = item.created_at.split("-");
-              const formattedDate = new Date(`${year}-${month}-${day}`).toLocaleDateString("id-ID", {
-                day: "2-digit", month: "short", year: "numeric",
+              const formattedDate = new Date(
+                `${year}-${month}-${day}`,
+              ).toLocaleDateString("id-ID", {
+                day: "2-digit",
+                month: "short",
+                year: "numeric",
               });
 
               return (
@@ -196,12 +216,16 @@ export default function DetailTransaction() {
                 >
                   <div className="flex justify-between items-start mb-3">
                     <div className="flex items-center gap-3">
-                      <div className={`flex items-center justify-center w-10 h-10 rounded-xl ${
-                        isIncome 
-                          ? "bg-emerald-100/50 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400" 
-                          : "bg-rose-100/50 text-rose-600 dark:bg-rose-900/30 dark:text-rose-400"
-                      }`}>
-                        <i className={`fa-solid ${isIncome ? "fa-arrow-trend-up" : "fa-arrow-trend-down"}`}></i>
+                      <div
+                        className={`flex items-center justify-center w-10 h-10 rounded-xl ${
+                          isIncome
+                            ? "bg-emerald-100/50 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400"
+                            : "bg-rose-100/50 text-rose-600 dark:bg-rose-900/30 dark:text-rose-400"
+                        }`}
+                      >
+                        <i
+                          className={`fa-solid ${isIncome ? "fa-arrow-trend-up" : "fa-arrow-trend-down"}`}
+                        ></i>
                       </div>
                       <div>
                         <h2 className="font-bold text-gray-800 dark:text-gray-200">
@@ -229,17 +253,24 @@ export default function DetailTransaction() {
                   </div>
 
                   <div className="flex justify-between items-end mt-4 pt-3 border-t border-gray-100 dark:border-gray-800/50">
-                    <span className={`px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ${
-                      isIncome 
-                        ? "bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400" 
-                        : "bg-rose-50 text-rose-600 dark:bg-rose-500/10 dark:text-rose-400"
-                    }`}>
+                    <span
+                      className={`px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ${
+                        isIncome
+                          ? "bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400"
+                          : "bg-rose-50 text-rose-600 dark:bg-rose-500/10 dark:text-rose-400"
+                      }`}
+                    >
                       {item.type}
                     </span>
-                    <span className={`font-bold text-lg ${
-                      isIncome ? "text-emerald-600 dark:text-emerald-400" : "text-gray-900 dark:text-gray-100"
-                    }`}>
-                      {isIncome ? "+" : "-"} {item.amount.toLocaleString("id-ID", {
+                    <span
+                      className={`font-bold text-lg ${
+                        isIncome
+                          ? "text-emerald-600 dark:text-emerald-400"
+                          : "text-gray-900 dark:text-gray-100"
+                      }`}
+                    >
+                      {isIncome ? "+" : "-"}{" "}
+                      {item.amount.toLocaleString("id-ID", {
                         style: "currency",
                         currency: "IDR",
                         minimumFractionDigits: 0,
@@ -287,12 +318,20 @@ export default function DetailTransaction() {
           </div>
         </motion.div>
       ) : (
-        <motion.div variants={itemVariants} className="glass-card rounded-3xl p-12 flex flex-col items-center justify-center text-center">
+        <motion.div
+          variants={itemVariants}
+          className="glass-card rounded-3xl p-12 flex flex-col items-center justify-center text-center"
+        >
           <div className="w-24 h-24 bg-gray-50 dark:bg-gray-800 rounded-full flex items-center justify-center mb-6">
             <i className="fa-solid fa-receipt text-4xl text-gray-300 dark:text-gray-600"></i>
           </div>
-          <h2 className="text-xl font-bold text-gray-800 dark:text-gray-200 mb-2">Belum Ada Transaksi</h2>
-          <p className="text-gray-500 dark:text-gray-400 mb-8 max-w-sm">Mulai catat pemasukan dan pengeluaran Anda untuk melihat riwayatnya disini.</p>
+          <h2 className="text-xl font-bold text-gray-800 dark:text-gray-200 mb-2">
+            Belum Ada Transaksi
+          </h2>
+          <p className="text-gray-500 dark:text-gray-400 mb-8 max-w-sm">
+            Mulai catat pemasukan dan pengeluaran Anda untuk melihat riwayatnya
+            disini.
+          </p>
           <Link
             to="/dashboard/transactions/add"
             className="px-6 py-3 bg-gradient-brand text-white font-medium rounded-xl shadow-lg shadow-[#5044E5]/30 hover:shadow-[#5044E5]/50 hover:-translate-y-0.5 transition-all"
