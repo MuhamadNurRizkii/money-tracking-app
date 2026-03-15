@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { userLogin } from "../../lib/api/publicApi";
-import { alertError, alertModal } from "../../lib/alert";
 import { jwtDecode } from "jwt-decode";
 import toast, { Toaster } from "react-hot-toast";
+import { motion } from "motion/react";
 
 export default function Login() {
   const [loading, setLoading] = useState(false);
@@ -60,22 +60,27 @@ export default function Login() {
   }
 
   return (
-    <div className="p-6 rounded-2xl shadow-lg dark:shadow-blue-500/10 dark:border dark:border-gray-700 w-full mx-auto max-w-md bg-white dark:bg-gray-900 transition">
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="p-8 rounded-3xl w-full mx-auto max-w-md glass-card transition-all duration-300"
+    >
       <Toaster />
       <div className="mb-7">
-        <h1 className="text-2xl text-center font-bold text-blue-600">
+        <h1 className="text-3xl text-center font-bold text-gradient pb-1">
           Money Tracking
         </h1>
-        <p className="mt-2 text-center mb-8 text-gray-700 dark:text-gray-300">
+        <p className="mt-2 text-center mb-8 text-gray-600 dark:text-gray-400 font-medium">
           Sign in to your account
         </p>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="space-y-5">
           {/* Username */}
-          <div className="username flex flex-col mb-4">
+          <div className="username flex flex-col">
             <label
               htmlFor="username"
-              className="mb-2 pl-2 text-sm text-gray-700 dark:text-gray-300"
+              className="mb-1.5 pl-1 text-sm font-medium text-gray-700 dark:text-gray-300"
             >
               Username
             </label>
@@ -84,21 +89,22 @@ export default function Login() {
               id="username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              placeholder="Username"
-              className="border border-gray-400 dark:border-gray-600 p-2 rounded-md 
-                       bg-white dark:bg-gray-800 
-                       text-gray-700 dark:text-gray-200
+              placeholder="Enter your username"
+              className="px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700/50 
+                       bg-gray-50/50 dark:bg-gray-800/50 
+                       text-gray-800 dark:text-gray-100
                        placeholder-gray-400 dark:placeholder-gray-500
-                       focus:outline-none focus:ring-1 focus:ring-blue-600"
+                       focus:outline-none focus:ring-2 focus:ring-[#5044E5]/50 focus:border-[#5044E5]
+                       transition-all duration-200"
               autoComplete="off"
             />
           </div>
 
           {/* Password */}
-          <div className="password flex flex-col mb-4">
+          <div className="password flex flex-col">
             <label
               htmlFor="password"
-              className="mb-2 pl-2 text-sm text-gray-700 dark:text-gray-300"
+              className="mb-1.5 pl-1 text-sm font-medium text-gray-700 dark:text-gray-300"
             >
               Password
             </label>
@@ -107,21 +113,25 @@ export default function Login() {
               id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Password"
-              className="border border-gray-400 dark:border-gray-600 p-2 rounded-md 
-                       bg-white dark:bg-gray-800 
-                       text-gray-700 dark:text-gray-200
+              placeholder="Enter your password"
+              className="px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700/50 
+                       bg-gray-50/50 dark:bg-gray-800/50 
+                       text-gray-800 dark:text-gray-100
                        placeholder-gray-400 dark:placeholder-gray-500
-                       focus:outline-none focus:ring-1 focus:ring-blue-600"
+                       focus:outline-none focus:ring-2 focus:ring-[#5044E5]/50 focus:border-[#5044E5]
+                       transition-all duration-200"
               autoComplete="off"
             />
           </div>
 
           {/* Button */}
-          <div className="mb-4">
+          <div className="pt-2">
             <button
               disabled={loading}
-              className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-500 dark:hover:bg-blue-400 transition"
+              className="w-full bg-gradient-brand text-white font-medium py-3 rounded-xl 
+                       shadow-lg shadow-[#5044E5]/30 hover:shadow-[#5044E5]/50
+                       hover:-translate-y-0.5 active:translate-y-0.5 
+                       transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed"
             >
               {loading ? (
                 <span className="loading loading-spinner loading-sm"></span>
@@ -132,17 +142,17 @@ export default function Login() {
           </div>
 
           {/* Link */}
-          <p className="text-sm pt-2 pl-2 text-gray-700 dark:text-gray-400">
+          <p className="text-center text-sm pt-4 text-gray-600 dark:text-gray-400">
             Don't have an account?{" "}
             <Link
               to={"/register"}
-              className="underline hover:text-blue-600 dark:hover:text-blue-400"
+              className="font-medium text-[#5044E5] dark:text-[#4d8cea] hover:underline transition-colors"
             >
               Sign up
             </Link>
           </p>
         </form>
       </div>
-    </div>
+    </motion.div>
   );
 }

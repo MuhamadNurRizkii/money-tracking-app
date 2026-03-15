@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router";
 import { getDataTransaction } from "../../lib/api/userApi";
 import { alertError } from "../../lib/alert";
+import { motion } from "motion/react";
 
 export default function Dashboard() {
   const [transactions, setTransactions] = useState({});
@@ -48,20 +49,52 @@ export default function Dashboard() {
 
   const saldo = total_pemasukan - total_pengeluaran;
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: { 
+      opacity: 1,
+      transition: { staggerChildren: 0.1 }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+  };
+
   return (
-    <main className="relative p-4 lg:p-6 min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
+    <motion.main 
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+      className="relative max-w-5xl mx-auto"
+    >
+      <div className="mb-8">
+        <motion.h1 variants={itemVariants} className="text-3xl font-bold text-gray-800 dark:text-white">
+          Overview
+        </motion.h1>
+        <motion.p variants={itemVariants} className="text-gray-500 dark:text-gray-400 mt-1">
+          Laporan ringkas keuangan Anda
+        </motion.p>
+      </div>
+
       {/* Keterangan Saldo */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10">
         {/* Saldo Saat Ini */}
-        <div
-          className="relative p-6 bg-gradient-to-br from-blue-600 to-cyan-600 
-                        rounded-2xl shadow-lg flex flex-col justify-between md:row-span-3"
+        <motion.div
+          variants={itemVariants}
+          className="relative p-6 lg:p-8 bg-gradient-brand
+                        rounded-3xl shadow-lg shadow-[#5044E5]/30 flex flex-col justify-between lg:col-span-2 overflow-hidden"
         >
-          <div>
-            <h1 className="text-white/90 text-sm font-semibold">
-              Saldo Saat Ini
-            </h1>
-            <p className="text-white text-2xl font-medium mt-2">
+          {/* Decorative circles */}
+          <div className="absolute top-0 right-0 -mt-4 -mr-4 w-32 h-32 bg-white/10 rounded-full blur-xl"></div>
+          <div className="absolute bottom-0 left-0 -mb-4 -ml-4 w-24 h-24 bg-black/10 rounded-full blur-lg"></div>
+          
+          <div className="relative z-10">
+            <h2 className="text-white/80 font-medium tracking-wide">
+              Total Saldo
+            </h2>
+            <p className="text-white text-4xl lg:text-5xl font-bold mt-2">
               {loading ? (
                 <span className="loading loading-spinner loading-lg"></span>
               ) : (
@@ -69,71 +102,83 @@ export default function Dashboard() {
               )}
             </p>
           </div>
-          <div className="absolute right-4 bottom-4 bg-white/20 p-3 rounded-full">
-            <i className="fa-solid fa-wallet text-white text-xl"></i>
+          <div className="absolute right-6 lg:right-8 bottom-6 lg:bottom-8 bg-white/20 backdrop-blur-md p-4 rounded-2xl">
+            <i className="fa-solid fa-wallet text-white text-2xl"></i>
           </div>
-        </div>
+        </motion.div>
 
         {/* Wrapper pemasukan + pengeluaran */}
-        <div className="grid grid-cols-2 gap-3 sm:gap-4">
+        <div className="grid grid-cols-2 lg:grid-cols-1 gap-4 lg:gap-6">
           {/* Pemasukkan */}
-          <div
-            className="p-3 bg-gradient-to-br from-emerald-600 to-green-600 
-                          rounded-xl shadow-md relative"
+          <motion.div
+            variants={itemVariants}
+            className="p-5 glass-card rounded-3xl relative overflow-hidden group hover:border-emerald-500/50 transition-colors duration-300"
           >
-            <h1 className="text-white/90 text-xs font-semibold">Pemasukkan</h1>
-            <p className="text-white text-base font-medium mt-1 truncate">
+            <div className="absolute -right-4 -top-4 w-16 h-16 bg-emerald-500/10 rounded-full blur-xl group-hover:bg-emerald-500/20 transition-colors"></div>
+            <div className="flex items-center gap-3 mb-2">
+              <div className="bg-emerald-100 dark:bg-emerald-900/30 p-2 rounded-xl text-emerald-600 dark:text-emerald-400">
+                <i className="fa-solid fa-arrow-trend-up"></i>
+              </div>
+              <h2 className="text-gray-600 dark:text-gray-400 font-medium text-sm">Pemasukan</h2>
+            </div>
+            <p className="text-gray-800 dark:text-white text-xl font-bold truncate">
               {loading ? (
                 <span className="loading loading-spinner loading-sm"></span>
               ) : (
                 formatCurrency(total_pemasukan)
               )}
             </p>
-            <div className="absolute right-2 bottom-2 bg-white/20 p-2 rounded-full">
-              <i className="fa-solid fa-arrow-up text-white text-sm"></i>
-            </div>
-          </div>
+          </motion.div>
 
           {/* Pengeluaran */}
-          <div
-            className="p-3 bg-gradient-to-br from-rose-600 to-red-500 
-                          rounded-xl shadow-md relative"
+          <motion.div
+            variants={itemVariants}
+            className="p-5 glass-card rounded-3xl relative overflow-hidden group hover:border-rose-500/50 transition-colors duration-300"
           >
-            <h1 className="text-white/90 text-xs font-semibold">Pengeluaran</h1>
-            <p className="text-white text-base font-medium mt-1 truncate">
+            <div className="absolute -right-4 -top-4 w-16 h-16 bg-rose-500/10 rounded-full blur-xl group-hover:bg-rose-500/20 transition-colors"></div>
+            <div className="flex items-center gap-3 mb-2">
+              <div className="bg-rose-100 dark:bg-rose-900/30 p-2 rounded-xl text-rose-600 dark:text-rose-400">
+                <i className="fa-solid fa-arrow-trend-down"></i>
+              </div>
+              <h2 className="text-gray-600 dark:text-gray-400 font-medium text-sm">Pengeluaran</h2>
+            </div>
+            <p className="text-gray-800 dark:text-white text-xl font-bold truncate">
               {loading ? (
                 <span className="loading loading-spinner loading-sm"></span>
               ) : (
                 formatCurrency(total_pengeluaran)
               )}
             </p>
-            <div className="absolute right-2 bottom-2 bg-white/20 p-2 rounded-full">
-              <i className="fa-solid fa-arrow-down text-white text-sm"></i>
-            </div>
-          </div>
+          </motion.div>
         </div>
       </div>
 
       {/* History Transaksi */}
-      <div className="w-full">
-        <h2 className="text-xl font-semibold mb-6 text-gray-800 dark:text-gray-100">
-          Riwayat Transaksi
-        </h2>
+      <motion.div variants={itemVariants} className="w-full">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-xl font-bold text-gray-800 dark:text-white">
+            Riwayat Transaksi
+          </h2>
+          <button onClick={() => navigate('/dashboard/transactions')} className="text-sm font-medium text-[#5044E5] dark:text-[#4d8cea] hover:underline">
+            Lihat Semua
+          </button>
+        </div>
+        
         <div
-          className="bg-white dark:bg-gray-800 rounded-2xl shadow-md 
-                        border border-gray-200 dark:border-gray-700 divide-y dark:divide-gray-700"
+          className="glass-card rounded-3xl divide-y divide-gray-100 dark:divide-gray-800/50 overflow-hidden"
         >
           {loading ? (
             [...Array(3)].map((_, i) => (
               <div
                 key={i}
-                className="animate-pulse h-20 bg-gray-100 dark:bg-gray-700 rounded-xl m-2"
+                className="animate-pulse h-20 bg-gray-100/50 dark:bg-gray-800/50 m-2 rounded-2xl"
               ></div>
             ))
           ) : recent.length === 0 ? (
-            <p className="text-center py-8 text-gray-500 dark:text-gray-400">
-              Belum ada transaksi.
-            </p>
+            <div className="flex flex-col items-center justify-center py-12 text-gray-500 dark:text-gray-400">
+              <i className="fa-solid fa-receipt text-4xl mb-3 opacity-50"></i>
+              <p>Belum ada transaksi.</p>
+            </div>
           ) : (
             recent.map(({ id, title, amount, type, created_at }) => {
               const [day, month, year] = created_at.split("-");
@@ -144,28 +189,39 @@ export default function Dashboard() {
                 month: "short",
                 year: "numeric",
               });
+              
+              const isIncome = type === "pemasukkan";
 
               return (
                 <div
                   key={id}
-                  className="flex justify-between items-center px-4 py-3"
+                  className="flex justify-between items-center p-5 hover:bg-gray-50/50 dark:hover:bg-gray-800/50 transition-colors"
                 >
-                  <div>
-                    <h2 className="font-semibold text-gray-800 dark:text-gray-200">
-                      {title}
-                    </h2>
-                    <p className="text-sm text-gray-500 dark:text-gray-400 capitalize">
-                      {type} • {formattedDate}
-                    </p>
+                  <div className="flex items-center gap-4">
+                    <div className={`flex items-center justify-center w-12 h-12 rounded-2xl ${
+                      isIncome 
+                        ? "bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400" 
+                        : "bg-rose-100 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400"
+                    }`}>
+                      <i className={`fa-solid ${isIncome ? "fa-arrow-down" : "fa-arrow-up"}`}></i>
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-gray-900 dark:text-gray-100">
+                        {title}
+                      </h3>
+                      <p className="text-sm text-gray-500 dark:text-gray-400">
+                        {formattedDate}
+                      </p>
+                    </div>
                   </div>
                   <span
-                    className={`font-semibold ${
-                      type === "pemasukkan"
+                    className={`font-bold ${
+                      isIncome
                         ? "text-emerald-600 dark:text-emerald-400"
-                        : "text-rose-600 dark:text-rose-400"
+                        : "text-gray-900 dark:text-gray-100"
                     }`}
                   >
-                    {amount.toLocaleString("id-ID", {
+                    {isIncome ? "+" : "-"} {amount.toLocaleString("id-ID", {
                       style: "currency",
                       currency: "IDR",
                       minimumFractionDigits: 0,
@@ -176,7 +232,7 @@ export default function Dashboard() {
             })
           )}
         </div>
-      </div>
-    </main>
+      </motion.div>
+    </motion.main>
   );
 }

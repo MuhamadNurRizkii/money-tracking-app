@@ -41,18 +41,26 @@ export const WeeklyLineChart = ({ data }) => {
       {
         label: "Pemasukkan",
         data: pemasukkanData,
-        borderColor: "green",
-        backgroundColor: "rgba(0,128,0,0.2)",
+        borderColor: "#10B981", // emerald-500
+        backgroundColor: "rgba(16, 185, 129, 0.1)",
+        pointBackgroundColor: "#10B981",
+        pointBorderColor: "#fff",
+        pointHoverBackgroundColor: "#fff",
+        pointHoverBorderColor: "#10B981",
         fill: true,
-        tension: 0.3,
+        tension: 0.4,
       },
       {
         label: "Pengeluaran",
         data: pengeluaranData,
-        borderColor: "red",
-        backgroundColor: "rgba(255,0,0,0.2)",
+        borderColor: "#F43F5E", // rose-500
+        backgroundColor: "rgba(244, 63, 94, 0.1)",
+        pointBackgroundColor: "#F43F5E",
+        pointBorderColor: "#fff",
+        pointHoverBackgroundColor: "#fff",
+        pointHoverBorderColor: "#F43F5E",
         fill: true,
-        tension: 0.3,
+        tension: 0.4,
       },
     ],
   };
@@ -63,17 +71,80 @@ export const WeeklyLineChart = ({ data }) => {
     plugins: {
       legend: {
         position: "top",
+        labels: {
+          color: "#9CA3AF", // gray-400
+          font: {
+            family: "'Poppins', sans-serif",
+            size: 13,
+            weight: '500'
+          },
+          usePointStyle: true,
+          boxWidth: 8,
+          padding: 20,
+        },
       },
+      tooltip: {
+        backgroundColor: "rgba(17, 24, 39, 0.9)", // gray-900
+        titleColor: "#fff",
+        bodyColor: "#fff",
+        padding: 12,
+        cornerRadius: 12,
+        titleFont: {
+          family: "'Poppins', sans-serif",
+          size: 13,
+        },
+        bodyFont: {
+          family: "'Poppins', sans-serif",
+          size: 14,
+          weight: 'bold'
+        },
+        displayColors: true,
+      }
     },
     scales: {
+      x: {
+        grid: {
+          display: false,
+        },
+        ticks: {
+          color: "#9CA3AF",
+          font: {
+            family: "'Poppins', sans-serif",
+            size: 12,
+          }
+        }
+      },
       y: {
         beginAtZero: true,
+        grid: {
+          color: "rgba(156, 163, 175, 0.1)",
+          drawBorder: false,
+        },
+        ticks: {
+          color: "#9CA3AF",
+          font: {
+            family: "'Poppins', sans-serif",
+            size: 12,
+          },
+          callback: function(value) {
+            if (value >= 1000000) {
+              return (value / 1000000).toFixed(1) + 'M';
+            } else if (value >= 1000) {
+              return (value / 1000).toFixed(1) + 'K';
+            }
+            return value;
+          }
+        },
       },
+    },
+    interaction: {
+      intersect: false,
+      mode: 'index',
     },
   };
 
   return (
-    <div className="md:h-[400px] w-full">
+    <div className="h-full w-full">
       <Line data={chartData} options={options} />
     </div>
   );
